@@ -1,5 +1,5 @@
 FROM openjdk:11-jdk-slim-buster AS jar-builder
-COPY /root/drone/judgegirl/judge-girl-secrets/* ./
+COPY /tmp/secret/* ./
 RUN apt update && apt install git -y && \
     git submodule update --recursive --init && \
     ./mvnw package
