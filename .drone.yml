@@ -30,6 +30,7 @@ steps:
       # - name: shared-folder
       #   path: /drone/src/target
     commands:
+      - git submodule update --recursive --init
       - cd Judger && docker build . -t judger -f Dockerfile.cqi && cd .. && docker-compose -f services.yml build
     when:
       event: push
