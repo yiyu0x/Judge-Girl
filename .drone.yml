@@ -23,7 +23,6 @@ steps:
   - name: Initialize environment
     image: alpine/git:v2.32.0
     commands:
-      - apt update && apt install git -y
       - git submodule update --recursive --init
 
   - name: Image Building
