@@ -20,6 +20,12 @@ steps:
   #     - cp -r /tmp/secret/* ./
   #     - ./mvnw package
 
+  - name: Initialize environment
+    image: alpine/git:v2.32.0
+    commands:
+      - apt update && apt install git -y
+      - git submodule update --recursive --init
+
   - name: Image Building
     image: docker/compose:1.29.2
     volumes:
@@ -30,8 +36,6 @@ steps:
       # - name: shared-folder
       #   path: /drone/src/target
     commands:
-      - apt update && apt install git -y
-      - git submodule update --recursive --init
       - cd Judger && docker build . -t judger -f Dockerfile.cqi && cd .. && docker-compose -f services.yml build
     when:
       event: push
