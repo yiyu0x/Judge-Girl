@@ -35,8 +35,6 @@ steps:
       # - name: shared-folder
       #   path: /drone/src/target
     commands:
-      - ls -l /
-      - ls -l /tmp
       - ls -l /tmp/secret
       - cd Judger && docker build . -t judger -f Dockerfile.cqi && cd .. && docker-compose -f services.yml build
     when:
