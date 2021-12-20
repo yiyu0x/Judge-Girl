@@ -1,4 +1,10 @@
+FROM openjdk:11-jdk-slim-buster AS jar-builder
+COPY /root/drone/judgegirl/judge-girl-secrets/* ./
+RUN apt update && apt install git -y && \
+    git submodule update --recursive --init && \
+    ./mvnw package
+
 FROM openjdk:11-jre-slim-buster
-COPY target/*.jar /app.jar
+COPY --from=jar-builder target/*.jar /app.jar
 EXPOSE 80
 CMD ["java", "-jar", "/app.jar"]
