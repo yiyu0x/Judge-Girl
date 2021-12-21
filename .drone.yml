@@ -26,20 +26,22 @@ steps:
   #     - git submodule update --recursive --init
 
   - name: Image Building
-    image: docker/compose:1.29.2
+    #image: docker/compose:1.29.2
+    image: docker:dind
+    privileged: true
     volumes:
       - name: secret
         path: /tmp/secret
-      - name: dockersock
-        path: /var/run
+      # - name: dockersock
+      #   path: /var/run
       # - name: shared-folder
       #   path: /drone/src/target
     commands:
       - while ! docker ps -a; do sleep 1; done
       - mkdir Judger/secret && cp -r /tmp/secret/* Judger/secret/
       - mkdir secret && cp -r /tmp/secret/* secret/
-      - docker info
-      # - cd Judger && docker build . -t judger -f Dockerfile.cqi && cd .. && docker-compose -f services.yml build
+      # - docker info
+      - cd Judger && docker build . -t judger -f Dockerfile.cqi && cd .. && docker-compose -f services.yml build
     when:
       event: push
 
