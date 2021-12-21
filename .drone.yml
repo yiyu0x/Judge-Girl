@@ -37,14 +37,15 @@ steps:
     commands:
       - mkdir Judger/secret && cp -r /tmp/secret/* Judger/secret/
       - mkdir secret && cp -r /tmp/secret/* secret/
-      - cd Judger && docker build . -t judger -f Dockerfile.cqi && cd .. && docker-compose -f services.yml build
+      - cd Judger && docker build . -t judger -f Dockerfile.cqi && cd ..
+      # - docker-compose -f services.yml build
     when:
       event: push
 
   - name: Deploy
     image: docker/compose:1.29.2
     volumes:
-      - name: dockersock
+      - name: dockersock-host
         path: /var/run
     commands:
       - docker network create judge-girl || echo 'Docker Network "judge-girl" already exists'
@@ -55,7 +56,7 @@ steps:
       event: push
 
 volumes:
-  - name: dockersock
+  - name: dockersock-host
     host:
       path: /var/run/
   - name: secret
@@ -66,6 +67,14 @@ volumes:
   # - name: maven-cache
   #   host:
   #     path: /root/.m2
+
+services:
+  - name: docker
+    image: docker:dind:20.10
+    privileged: true
+    volumes:
+      - name: dockersock
+        path: /var/run
 
 trigger:
   event:
