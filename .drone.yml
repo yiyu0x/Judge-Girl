@@ -59,11 +59,11 @@ steps:
 
 services:
   - name: docker
-    image: docker:dind:20.10
+    image: docker:dind
     privileged: true
-    # volumes:
-    #   - name: dockersock
-    #     path: /var/run
+    volumes:
+      - name: dockersock
+        path: /var/run
 
 volumes:
   - name: dockersock
