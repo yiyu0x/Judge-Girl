@@ -35,7 +35,7 @@ steps:
       # - name: shared-folder
       #   path: /drone/src/target
     commands:
-      - sleep 10 # give docker enough time to start
+      - sleep 15 # give docker enough time to start
       - mkdir Judger/secret && cp -r /tmp/secret/* Judger/secret/
       - mkdir secret && cp -r /tmp/secret/* secret/
       - cd Judger && docker build . -t judger -f Dockerfile.cqi && cd ..
