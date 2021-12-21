@@ -20,10 +20,10 @@ steps:
   #     - cp -r /tmp/secret/* ./
   #     - ./mvnw package
 
-  - name: Initialize environment
-    image: alpine/git:v2.32.0
-    commands:
-      - git submodule update --recursive --init
+  # - name: Initialize environment
+  #   image: alpine/git:v2.32.0
+  #   commands:
+  #     - git submodule update --recursive --init
 
   - name: Image Building
     image: docker/compose:1.29.2
