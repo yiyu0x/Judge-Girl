@@ -35,7 +35,7 @@ steps:
       # - name: shared-folder
       #   path: /drone/src/target
     commands:
-      - sleep 20 # give docker enough time to start
+      - while ! docker ps -a; do sleep 1; done
       - docker ps -a
       # - mkdir Judger/secret && cp -r /tmp/secret/* Judger/secret/
       # - mkdir secret && cp -r /tmp/secret/* secret/
