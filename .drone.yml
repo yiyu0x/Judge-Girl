@@ -41,6 +41,8 @@ steps:
       - pwd
       - ls -l
       # - cd Judger && docker build . -t judger -f Dockerfile.cqi && cd ..
+      - cd Judger && cd ..
+      - pwd
       # - docker-compose -f services.yml build
     when:
       event: push
