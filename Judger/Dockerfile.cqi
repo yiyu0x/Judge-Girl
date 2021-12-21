@@ -1,16 +1,16 @@
-FROM openjdk:11-jdk-slim-buster AS jar-builder
-RUN apt update && \
-    apt install git -y && \
-    git clone https://github.com/Judge-Girl/Judge-Girl.git && \
-    cd Judge-Girl && \
-    git submodule update --recursive --init
-WORKDIR Judge-Girl
-COPY secret/ .
-RUN ./mvnw package
+# FROM openjdk:11-jdk-slim-buster AS jar-builder
+# RUN apt update && \
+#     apt install git -y && \
+#     git clone https://github.com/Judge-Girl/Judge-Girl.git && \
+#     cd Judge-Girl && \
+#     git submodule update --recursive --init
+# WORKDIR Judge-Girl
+# COPY secret/ .
+# RUN ./mvnw package
 
 ### Get Linux
 FROM nvidia/cuda:10.0-base
-COPY --from=jar-builder target/*.jar /app.jar
+# COPY --from=jar-builder target/*.jar /app.jar
 RUN apt-get update && apt-get install -y gcc clinfo ocl-icd-libopencl1 opencl-headers ocl-icd-opencl-dev
 RUN apt-get update && apt-get install -y cgroup-bin cgroup-lite libcgroup1
 RUN apt-get update && apt-get install -y libseccomp-dev libseccomp2 seccomp

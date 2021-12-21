@@ -3,27 +3,22 @@ type: docker
 name: Judge-Girl/Judge-Girl
 
 steps:
-  # - name: Integration
-  #   image: openjdk:11-jdk-slim-buster
-  #   volumes:
-  #     - name: shared-folder
-  #       path: /drone/src/target
-  #     - name: secret
-  #       path: /tmp/secret
-  #     - name: dockersock
-  #       path: /var/run
-  #     - name: maven-cache
-  #       path: /root/.m2
-  #   commands:
-  #     - apt update && apt install git -y
-  #     - git submodule update --recursive --init
-  #     - cp -r /tmp/secret/* ./
-  #     - ./mvnw package
-
-  # - name: Initialize environment
-  #   image: alpine/git:v2.32.0
-  #   commands:
-  #     - git submodule update --recursive --init
+  - name: Integration
+    image: openjdk:11-jdk-slim-buster
+    volumes:
+      - name: shared-folder
+        path: /drone/src/target
+      - name: secret
+        path: /tmp/secret
+      - name: dockersock
+        path: /var/run
+      - name: maven-cache
+        path: /root/.m2
+    commands:
+      - apt update && apt install git -y
+      - git submodule update --recursive --init
+      - cp -r /tmp/secret/* ./
+      - ./mvnw package
 
   - name: Image Building
     image: docker/compose:1.29.2
@@ -32,13 +27,14 @@ steps:
         path: /tmp/secret
       - name: dockersock
         path: /var/run
-      # - name: shared-folder
-      #   path: /drone/src/target
+      - name: shared-folder
+        path: /drone/src/target
     commands:
       - while ! docker ps -a; do sleep 1; done
       - mkdir Judger/secret && cp -r /tmp/secret/* Judger/secret/
       - mkdir secret && cp -r /tmp/secret/* secret/
-      - cd Judger && docker build . -t judger -f Dockerfile.cqi && cd .. && docker-compose -f services.yml build
+      - cd Judger && docker build . -t judger -f Dockerfile.cqi && cd ..
+      # - docker-compose -f services.yml build
     when:
       event: push
 
@@ -55,11 +51,21 @@ steps:
   #   when:
   #     event: push
 
+services:
+  - name: docker
+    image: docker:dind
+    privileged: true
+    volumes:
+      - name: dockersock
+        path: /var/run
+
 volumes:
+  - name: dockersock
+    temp: {}
   - name: secret
     host:
       path: /root/drone/judgegirl/judge-girl-secrets/
-  - name: dockersock
+  - name: dockersock-host
     host:
       path: /var/run/
 
