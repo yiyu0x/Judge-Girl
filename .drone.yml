@@ -36,11 +36,10 @@ steps:
       #   path: /drone/src/target
     commands:
       - while ! docker ps -a; do sleep 1; done
-      - docker ps -a
-      # - mkdir Judger/secret && cp -r /tmp/secret/* Judger/secret/
-      # - mkdir secret && cp -r /tmp/secret/* secret/
-      # - cd Judger && docker build . -t judger -f Dockerfile.cqi && cd ..
-      # - docker-compose -f services.yml build
+      - mkdir Judger/secret && cp -r /tmp/secret/* Judger/secret/
+      - mkdir secret && cp -r /tmp/secret/* secret/
+      - cd Judger && docker build . -t judger -f Dockerfile.cqi && cd ..
+      - docker-compose -f services.yml build
     when:
       event: push
 
@@ -68,12 +67,12 @@ services:
 volumes:
   - name: dockersock
     temp: {}
-  # - name: secret
-  #   host:
-  #     path: /root/drone/judgegirl/judge-girl-secrets/
-  # - name: dockersock-host
-  #   host:
-  #     path: /var/run/
+  - name: secret
+    host:
+      path: /root/drone/judgegirl/judge-girl-secrets/
+  - name: dockersock-host
+    host:
+      path: /var/run/
 
   # - name: shared-folder
   #   temp: {}
