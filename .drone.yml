@@ -59,6 +59,8 @@ volumes:
   - name: dockersock-host
     host:
       path: /var/run/
+  - name: dockersock
+    temp: {}
   - name: secret
     host:
       path: /root/drone/judgegirl/judge-girl-secrets/
