@@ -35,6 +35,7 @@ steps:
       # - name: shared-folder
       #   path: /drone/src/target
     commands:
+      - sleep 5 # give docker enough time to start
       - mkdir Judger/secret && cp -r /tmp/secret/* Judger/secret/
       - mkdir secret && cp -r /tmp/secret/* secret/
       - cd Judger && docker build . -t judger -f Dockerfile.cqi && cd ..
@@ -55,6 +56,14 @@ steps:
     when:
       event: push
 
+services:
+  - name: docker
+    image: docker:dind:20.10
+    privileged: true
+    volumes:
+      - name: dockersock
+        path: /var/run
+
 volumes:
   - name: dockersock-host
     host:
@@ -69,14 +78,6 @@ volumes:
   # - name: maven-cache
   #   host:
   #     path: /root/.m2
-
-services:
-  - name: docker
-    image: docker:dind:20.10
-    privileged: true
-    volumes:
-      - name: dockersock
-        path: /var/run
 
 trigger:
   event:
