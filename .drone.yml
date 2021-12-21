@@ -35,26 +35,27 @@ steps:
       # - name: shared-folder
       #   path: /drone/src/target
     commands:
-      - sleep 15 # give docker enough time to start
-      - mkdir Judger/secret && cp -r /tmp/secret/* Judger/secret/
-      - mkdir secret && cp -r /tmp/secret/* secret/
-      - cd Judger && docker build . -t judger -f Dockerfile.cqi && cd ..
+      - sleep 20 # give docker enough time to start
+      - docker ps -a
+      # - mkdir Judger/secret && cp -r /tmp/secret/* Judger/secret/
+      # - mkdir secret && cp -r /tmp/secret/* secret/
+      # - cd Judger && docker build . -t judger -f Dockerfile.cqi && cd ..
       # - docker-compose -f services.yml build
     when:
       event: push
 
-  - name: Deploy
-    image: docker/compose:1.29.2
-    volumes:
-      - name: dockersock-host
-        path: /var/run
-    commands:
-      - docker network create judge-girl || echo 'Docker Network "judge-girl" already exists'
-      - docker-compose -f infra.yml up -d && sleep 15
-      - docker-compose -f services.yml down
-      - docker-compose -f services.yml up -d
-    when:
-      event: push
+  # - name: Deploy
+  #   image: docker/compose:1.29.2
+  #   volumes:
+  #     - name: dockersock-host
+  #       path: /var/run
+  #   commands:
+  #     - docker network create judge-girl || echo 'Docker Network "judge-girl" already exists'
+  #     - docker-compose -f infra.yml up -d && sleep 15
+  #     - docker-compose -f services.yml down
+  #     - docker-compose -f services.yml up -d
+  #   when:
+  #     event: push
 
 services:
   - name: docker
@@ -65,14 +66,15 @@ services:
         path: /var/run
 
 volumes:
-  - name: dockersock-host
-    host:
-      path: /var/run/
   - name: dockersock
     temp: {}
-  - name: secret
-    host:
-      path: /root/drone/judgegirl/judge-girl-secrets/
+  # - name: secret
+  #   host:
+  #     path: /root/drone/judgegirl/judge-girl-secrets/
+  # - name: dockersock-host
+  #   host:
+  #     path: /var/run/
+
   # - name: shared-folder
   #   temp: {}
   # - name: maven-cache
