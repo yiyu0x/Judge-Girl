@@ -1,5 +1,6 @@
 FROM openjdk:11-jdk-slim-buster AS jar-builder
 COPY /tmp/secret/ ./
+COPY . .
 RUN apt update && apt install git -y && \
     git submodule update --recursive --init && \
     ./mvnw package
