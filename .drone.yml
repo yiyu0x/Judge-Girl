@@ -61,9 +61,9 @@ services:
   - name: docker
     image: docker:dind:20.10
     privileged: true
-    volumes:
-      - name: dockersock
-        path: /var/run
+    # volumes:
+    #   - name: dockersock
+    #     path: /var/run
 
 volumes:
   - name: dockersock
