@@ -27,7 +27,7 @@ steps:
 
   - name: Image Building
     #image: docker/compose:1.29.2
-    image: docker:dind
+    image: docker/docker:dind
     privileged: true
     volumes:
       - name: secret
